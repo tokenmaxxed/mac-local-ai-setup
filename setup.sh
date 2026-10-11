@@ -52,6 +52,13 @@ run "open -a Ollama"
 say "6/7 Downloading models: $MODELS"
 for m in $MODELS; do run "ollama pull $m"; done
 
+# Whisper speech-to-text model for whisper.cpp (large-v3-turbo, about 1.6GB)
+WHISPER_DIR="$HOME/whisper-models"; WHISPER_MODEL="$WHISPER_DIR/ggml-large-v3-turbo.bin"
+if [[ ! -f "$WHISPER_MODEL" ]]; then
+  run "mkdir -p \"$WHISPER_DIR\""
+  run "curl -fL --progress-bar -o \"$WHISPER_MODEL\" https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin"
+fi
+
 say "7/7 Security check"
 WARN=0
 ok(){ printf "  \033[1;32m✓\033[0m %s\n" "$*"; }
@@ -84,4 +91,5 @@ echo "  • Only download models from sources you trust (Ollama library, officia
 [[ $WARN -eq 0 ]] && ok "All checks passed"
 
 say "Done. Try:  ollama run ${MODELS%% *}"
+echo "Transcribe audio:  whisper-cli -m ~/whisper-models/ggml-large-v3-turbo.bin -f your-audio.wav"
 echo "Every token counts."
