@@ -20,34 +20,39 @@ say "Detected ${RAM_GB}GB unified memory"
 
 # Pick models that fit this machine unless the user set MODELS
 if [[ -z "${MODELS:-}" ]]; then
-  if   (( RAM_GB >= 96 )); then MODELS="gpt-oss:20b gpt-oss:120b"
-  elif (( RAM_GB >= 32 )); then MODELS="gpt-oss:20b"
+  if   (( RAM_GB >= 96 )); then MODELS="gpt-oss:20b qwen3.8:27b gpt-oss:120b"
+  elif (( RAM_GB >= 32 )); then MODELS="gpt-oss:20b qwen3.8:27b"
   else                          MODELS="gemma3:4b"
   fi
 fi
 
-say "1/6 Xcode command line tools"
+say "1/7 Xcode command line tools"
 xcode-select -p >/dev/null 2>&1 || run "xcode-select --install"
 
-say "2/6 Homebrew"
+say "2/7 Homebrew"
 if ! command -v brew >/dev/null 2>&1; then
   run '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
   run 'eval "$(/opt/homebrew/bin/brew shellenv)"'
 fi
 
-say "3/6 Apps: Ollama, LM Studio"
-for cask in ollama-app lm-studio; do
+say "3/7 Apps: Ollama, LM Studio, Chrome, VS Code, ChatGPT, Claude"
+for cask in ollama-app lm-studio google-chrome visual-studio-code chatgpt claude; do
   brew list --cask "$cask" >/dev/null 2>&1 || run "brew install --cask $cask"
 done
 
-say "4/6 Starting Ollama"
+say "4/7 Tools: ffmpeg (audio/video) and whisper.cpp (local speech-to-text)"
+for f in ffmpeg whisper-cpp; do
+  brew list "$f" >/dev/null 2>&1 || run "brew install $f"
+done
+
+say "5/7 Starting Ollama"
 run "open -a Ollama"
 [[ $DRY -eq 1 ]] || until curl -s localhost:11434 >/dev/null; do sleep 1; done
 
-say "5/6 Downloading models: $MODELS"
+say "6/7 Downloading models: $MODELS"
 for m in $MODELS; do run "ollama pull $m"; done
 
-say "6/6 Security check"
+say "7/7 Security check"
 WARN=0
 ok(){ printf "  \033[1;32m✓\033[0m %s\n" "$*"; }
 bad(){ printf "  \033[1;31m!\033[0m %s\n" "$*"; WARN=1; }
