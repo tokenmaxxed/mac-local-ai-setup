@@ -10,6 +10,7 @@ One command to turn a fresh Apple Silicon Mac into a local AI machine. It's the 
    - 96GB+: `gpt-oss:20b` + `qwen3.8:27b` + `gpt-oss:120b`
    - 32GB+: `gpt-oss:20b` + `qwen3.8:27b`
    - under 32GB: `gemma3:4b`
+5. Downloads the Whisper **large-v3-turbo** model (about 1.6GB) to `~/whisper-models`
 
 It skips anything you already have.
 
