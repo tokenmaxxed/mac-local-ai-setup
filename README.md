@@ -4,10 +4,11 @@ One command to turn a fresh Apple Silicon Mac into a local AI machine. It's the 
 
 ## What it does
 1. Installs the Xcode command line tools and Homebrew, if they're missing
-2. Installs **Ollama** and **LM Studio**
-3. Checks your Mac's memory and downloads models that fit:
-   - 96GB+: `gpt-oss:20b` + `gpt-oss:120b`
-   - 32GB+: `gpt-oss:20b`
+2. Installs the apps: **Ollama**, **LM Studio**, **Chrome**, **VS Code**, and the **ChatGPT** and **Claude** desktop apps (for local vs cloud side by side)
+3. Installs **ffmpeg** and **whisper.cpp** for local speech-to-text
+4. Checks your Mac's memory and downloads models that fit:
+   - 96GB+: `gpt-oss:20b` + `qwen3.8:27b` + `gpt-oss:120b`
+   - 32GB+: `gpt-oss:20b` + `qwen3.8:27b`
    - under 32GB: `gemma3:4b`
 
 It skips anything you already have.
