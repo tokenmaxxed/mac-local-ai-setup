@@ -12,11 +12,19 @@ One command to turn a fresh Apple Silicon Mac into a local AI machine. It's the 
 
 It skips anything you already have.
 
+Then it runs a security check:
+- Ollama only listens on your Mac (not your network or the internet)
+- macOS firewall is on (`--harden` switches it on for you)
+- FileVault disk encryption is on
+- Homebrew analytics are off
+- Reminders on LM Studio's local server and trusted model sources
+
 ## Run it
 ```bash
 curl -fsSL https://raw.githubusercontent.com/tokenmaxxed/mac-local-ai-setup/main/setup.sh -o setup.sh
 bash setup.sh --dry-run   # see what it will do first
 bash setup.sh
+bash setup.sh --harden    # also switch on the firewall (asks for your password)
 ```
 
 Pick your own models:
