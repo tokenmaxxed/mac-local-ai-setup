@@ -25,7 +25,12 @@ Then it runs a security check:
 
 ## Run it
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tokenmaxxed/mac-local-ai-setup/main/setup.sh -o setup.sh
+curl -fsSLO https://raw.githubusercontent.com/tokenmaxxed/mac-local-ai-setup/main/setup.sh && bash setup.sh
+```
+
+Or step by step:
+```bash
+curl -fsSLO https://raw.githubusercontent.com/tokenmaxxed/mac-local-ai-setup/main/setup.sh
 bash setup.sh --dry-run   # see what it will do first
 bash setup.sh             # hardware check, then tick what you want
 bash setup.sh --yes       # no questions, take the recommended picks
