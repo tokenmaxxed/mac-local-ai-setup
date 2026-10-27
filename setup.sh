@@ -32,7 +32,13 @@ RAM_GB=$(( $(sysctl -n hw.memsize) / 1024 / 1024 / 1024 ))
 GPU_CORES=$(system_profiler SPDisplaysDataType 2>/dev/null | awk -F': ' '/Total Number of Cores/{print $2; exit}')
 MACOS="$(sw_vers -productVersion) ($(sw_vers -buildVersion))"
 FREE_GB=$(df -g / | awk 'NR==2{print $4}')
-TB=$(system_profiler SPThunderboltDataType 2>/dev/null | grep -Eo 'Thunderbolt ?[0-9]' | sort -u | tail -1 || true)
+TBINFO=$(system_profiler SPThunderboltDataType 2>/dev/null || true)
+TB=$(echo "$TBINFO" | grep -Eo 'Thunderbolt ?[0-9]' | sort -u | tail -1 || true)
+if [[ -z "$TB" ]]; then   # newer macOS lists the port speed instead of the version
+  if   echo "$TBINFO" | grep -Eq '(80|120) Gb/s'; then TB="Thunderbolt 5"
+  elif echo "$TBINFO" | grep -Eq '40 Gb/s';       then TB="Thunderbolt 4 / USB4"
+  fi
+fi
 
 # Rough memory the GPU can use for a model: macOS gives it about 2/3 of RAM up to 36GB, about 3/4 above, minus headroom
 BUDGET=$(awk -v r="$RAM_GB" 'BEGIN{f=(r<=36)?0.67:0.75; printf "%.1f", r*f-1}')
